@@ -1,22 +1,28 @@
 name: refresh-badges
 on:
-  schedule:
-    - cron:  '0 2 * * *'   # run daily at 02:00 UTC
+  push:
+    paths: ["source/**/*.c"]
   workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'
+
 jobs:
-  update-badge:
+  labs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Count labs
-        id: counter
+        with: { fetch-depth: 0 }
+      - name: Count labs via git
+        id: count
         run: |
-          total=$(find source -type f -name "lab*.c" | wc -l)
-          echo "labs=$total" >> $GITHUB_OUTPUT
-      - name: Update README badge
-        uses: emibcn/badge-action@v2
+          echo "labs=$(git ls-files 'source/**/*.c' | wc -l)" >> $GITHUB_OUTPUT
+      - name: Update JSON badge
+        run: |
+          jq -n --arg labs "${{ steps.count.outputs.labs }}" '{lab_count:$labs}' > labs.json
+      - name: Publish badge
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          label: Labs
-          status: ${{ steps.counter.outputs.labs }}
-          color: 007ec6
-          path: README.md
+          branch: gh-pages
+          folder: .
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

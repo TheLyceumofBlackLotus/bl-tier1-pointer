@@ -1,0 +1,22 @@
+name: refresh-badges
+on:
+  schedule:
+    - cron:  '0 2 * * *'   # run daily at 02:00 UTC
+  workflow_dispatch:
+jobs:
+  update-badge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Count labs
+        id: counter
+        run: |
+          total=$(find source -type f -name "lab*.c" | wc -l)
+          echo "labs=$total" >> $GITHUB_OUTPUT
+      - name: Update README badge
+        uses: emibcn/badge-action@v2
+        with:
+          label: Labs
+          status: ${{ steps.counter.outputs.labs }}
+          color: 007ec6
+          path: README.md

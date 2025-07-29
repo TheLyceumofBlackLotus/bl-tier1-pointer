@@ -1,5 +1,7 @@
 # POINTER / TIER1 – BlackLotus C Warfare
 
+![Badge CI](https://github.com/TheLyceumofBlackLotus/bl-tier1-pointer/actions/workflows/ci-badge.yml/badge.svg)
+
 ![CI](https://github.com/TheLyceumofBlackLotus/bl-tier1-pointer/actions/workflows/badge-refresh.yml/badge.svg)
 
 ---

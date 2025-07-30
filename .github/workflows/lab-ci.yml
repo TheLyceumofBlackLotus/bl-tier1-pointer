@@ -1,0 +1,34 @@
+name: BlackLotus Dashboard Auto-Updater
+
+on:
+  push:
+    paths:
+      - 'labs/**'
+      - 'scripts/update_dashboard.py'
+      - 'README.md'
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: 🚀 Run Dashboard Script
+        run: |
+          python scripts/update_dashboard.py
+
+      - name: 💾 Commit README Update
+        run: |
+          git config --global user.name "BlackLotus CI"
+          git config --global user.email "ci@blacklotus.ai"
+          git add README.md
+          git commit -m "Auto-update: README dashboard [CI]"
+          git push
+        continue-on-error: true

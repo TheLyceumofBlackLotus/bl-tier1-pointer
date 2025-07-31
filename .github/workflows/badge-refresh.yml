@@ -1,4 +1,6 @@
 name: refresh-badges
+permissions:
+  contents: write
 on:
   push:
     paths: ["source/**/*.c"]

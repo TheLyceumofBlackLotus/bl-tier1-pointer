@@ -1,74 +1,7 @@
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Star War Dashboard</title>
-    <style>
-        body {
-            background-color: #0b0c10;
-            color: #c5c6c7;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 40px;
-        }
-        h1 {
-            color: #66fcf1;
-            border-bottom: 2px solid #45a29e;
-            padding-bottom: 10px;
-        }
-        table {
-            width: 60%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        td, th {
-            border: 1px solid #45a29e;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #1f2833;
-        }
-        .highlight {
-            color: #66fcf1;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-    <h1>🧠 Black Lotus | Star War Execution Dashboard</h1>
-    <table id="dashboard">
-        <tr><th>Metric</th><th>Value</th></tr>
-    </table>
-
-    <script>
-        fetch('summary.json')
-            .then(response => response.json())
-            .then(data => {
-                const dashboard = document.getElementById('dashboard');
-                for (const key in data) {
-                    const row = document.createElement('tr');
-                    const keyCell = document.createElement('td');
-                    const valCell = document.createElement('td');
-                    keyCell.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    valCell.textContent = data[key];
-                    if (key.includes('efficiency') || key.includes('percent')) {
-                        valCell.classList.add('highlight');
-                    }
-                    row.appendChild(keyCell);
-                    row.appendChild(valCell);
-                    dashboard.appendChild(row);
-                }
-            })
-            .catch(error => {
-                const dashboard = document.getElementById('dashboard');
-                const row = document.createElement('tr');
-                const errCell = document.createElement('td');
-                errCell.colSpan = 2;
-                errCell.textContent = "Failed to load summary.json. Make sure it's present.";
-                row.appendChild(errCell);
-                dashboard.appendChild(row);
-            });
-    </script>
-</body>
+<html>
+  <head>
+    <meta http-equiv="refresh" content="0; URL='dashboard.html'" />
+  </head>
+  <body></body>
 </html>

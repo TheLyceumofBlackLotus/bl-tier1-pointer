@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab Execution Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Lab Execution Summary</h1>
+    <table id="summary-table">
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        fetch('summary.json')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#summary-table tbody');
+                Object.keys(data).forEach(key => {
+                    const row = document.createElement('tr');
+                    const cellKey = document.createElement('td');
+                    const cellValue = document.createElement('td');
+                    cellKey.textContent = key;
+                    cellValue.textContent = data[key];
+                    row.appendChild(cellKey);
+                    row.appendChild(cellValue);
+                    tbody.appendChild(row);
+                });
+            });
+    </script>
+</body>
+</html>

@@ -1,24 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>★ Black Lotus Pointer Dashboard</title>
+  <meta charset="UTF-8" />
+  <title>🌌 BlackLotus Tier1 Pointer Dashboard</title>
   <style>
-    body { font-family: sans-serif; padding: 40px; text-align: center; }
-    .metric { margin: 10px auto; width: 60%; text-align: left; }
-    .barwrap { background: #eee; height: 10px; margin-top: 4px; }
-    .bar { background: #007acc; height: 100%; }
-    .badge { padding: 3px 6px; border-radius: 3px; }
-    .good { background: #4CAF50; color: white; }
-    .warn { background: #FFC107; color: black; }
-    .bad  { background: #F44336; color: white; }
+    body {
+      background-color: black;
+      color: #00FF41;
+      font-family: monospace;
+      padding: 2rem;
+    }
+    h1 {
+      color: #FF4136;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .metric {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
   </style>
 </head>
 <body>
-  <h1>★ Black Lotus Pointer Dashboard</h1>
-  <div id="box">Loading...</div>
-  <p id="stamp"></p>
+  <h1>🧠 BlackLotus Star Symbol Dashboard</h1>
+  <div class="metric">🧪 Total Labs: <span id="totalLabs">Loading...</span></div>
+  <div class="metric">✅ Completed: <span id="completed">Loading...</span></div>
+  <div class="metric">⚙️ Efficiency: <span id="efficiency">Loading...</span>%</div>
+  <div class="metric">⏱️ Avg Duration: <span id="avgDuration">Loading...</span> mins</div>
+  <div class="metric">🧠 Anki Cards: <span id="ankiCards">Loading...</span></div>
+  <div class="metric">🧬 Mutations: <span id="mutations">Loading...</span></div>
+  <div class="metric">⏳ ETA to Finish: <span id="eta">Loading...</span> hrs</div>
+  <div class="metric">🕒 Last Updated: <span id="lastUpdated">Loading...</span></div>
 
-  <script src="summary.js"></script> <!-- or inline JS -->
+  <script>
+    fetch("summary.json")
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("totalLabs").textContent = data.total_labs;
+        document.getElementById("completed").textContent = data.completed;
+        document.getElementById("efficiency").textContent = data.efficiency;
+        document.getElementById("avgDuration").textContent = data.average_duration_mins;
+        document.getElementById("ankiCards").textContent = data.anki_cards_total;
+        document.getElementById("mutations").textContent = data.mutations_tracked;
+        document.getElementById("eta").textContent = data.eta_hours_to_finish;
+        document.getElementById("lastUpdated").textContent = data.last_updated;
+      })
+      .catch(err => {
+        document.body.innerHTML += "<p style='color: red;'>❌ Failed to load summary.json</p>";
+      });
+  </script>
 </body>
 </html>

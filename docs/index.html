@@ -33,7 +33,7 @@
   <div class="metric">🕒 Last Updated: <span id="lastUpdated">Loading...</span></div>
 
   <script>
-    fetch("summary.json")
+    fetch("https://thelyceumofblacklotus.github.io/bl-tier1-pointer/summary.json")
       .then(response => response.json())
       .then(data => {
         document.getElementById("totalLabs").textContent = data.total_labs;

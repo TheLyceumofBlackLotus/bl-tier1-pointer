@@ -1,18 +1,16 @@
 <script>
-fetch('./summary.json')
+fetch('summary.json')  // ✅ direct access since both HTML and JSON are in /docs/
   .then(r => r.json())
   .then(s => {
     const box = document.getElementById('box');
-    box.textContent = '';                       // ← clears “Loading…”
+    box.textContent = ''; // clear loading...
 
-    // helper
     const row = (label, val, pct = null) => {
       const d = document.createElement('div');
       d.className = 'metric';
       d.innerHTML = `
         <div class="label">${label}: <strong>${val}</strong>${pct !== null ? ' (' + pct + '%)' : ''}</div>
-        ${pct !== null ? `<div class="barwrap"><div class="bar" style="width:${pct}%;"></div></div>` : ''}
-      `;
+        ${pct !== null ? `<div class="barwrap"><div class="bar" style="width:${pct}%;"></div></div>` : ''}`;
       box.appendChild(d);
     };
 
@@ -25,15 +23,12 @@ fetch('./summary.json')
     row('Avg quality',     badge(s.average_execution_quality));
     row('ETA',             s.projected_completion_date);
 
-    document.getElementById('stamp')
-            .textContent = 'Last update ' + s.last_updated;
+    document.getElementById('stamp').textContent = 'Last update ' + s.last_updated;
   })
   .catch(() => {
     document.getElementById('box').textContent = 'Failed to load data';
   });
 
-function badge(v){
+function badge(v) {
   let cls = v >= 4 ? 'good' : (v < 2 ? 'bad' : 'warn');
-  return `<span class="badge ${cls}">${v}</span>`;
-}
-</script>
+  return `<span

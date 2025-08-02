@@ -1,43 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Black Lotus Progress Tracker</title>
-  <style>
-    body { font-family: monospace; text-align: center; background: #fdfdfd; }
-    table { margin: 30px auto; border-collapse: collapse; width: 60%; }
-    th, td { border: 2px solid black; padding: 10px; }
-    th { background: #eee; }
-    tr:hover { background-color: #f2f2f2; }
-  </style>
-</head>
-<body>
-  <h1>🧠 Black Lotus Star Symbol Lab Progress</h1>
+<script>
+fetch('summary.json')  // works since index.html and JSON are in same folder
+  .then(r => r.json())
+  .then(s => {
+    const box = document.getElementById('box');
+    box.textContent = '';
 
-  <table>
-    <tr><th>Metric</th><th>Value</th></tr>
-    <tr><td>Symbol</td><td id="symbol"></td></tr>
-    <tr><td>Total Labs</td><td id="total"></td></tr>
-    <tr><td>Completed Labs</td><td id="completed"></td></tr>
-    <tr><td>Pending Labs</td><td id="pending"></td></tr>
-    <tr><td>Average Duration (mins)</td><td id="duration"></td></tr>
-    <tr><td>Average Delay (hrs)</td><td id="delay"></td></tr>
-    <tr><td>Efficiency (%)</td><td id="efficiency"></td></tr>
-    <tr><td>Estimated Completion</td><td id="eta"></td></tr>
-  </table>
+    const row = (label, val, pct = null) => {
+      const d = document.createElement('div');
+      d.className = 'metric';
+      d.innerHTML = `
+        <div class="label">${label}: <strong>${val}</strong>${pct !== null ? ' (' + pct + '%)' : ''}</div>
+        ${pct !== null ? `<div class="barwrap"><div class="bar" style="width:${pct}%;"></div></div>` : ''}`;
+      box.appendChild(d);
+    };
 
-  <script>
-    fetch("summary.json")
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("symbol").textContent = data.symbol;
-        document.getElementById("total").textContent = data.total_labs;
-        document.getElementById("completed").textContent = data.completed_labs;
-        document.getElementById("pending").textContent = data.pending_labs;
-        document.getElementById("duration").textContent = data.average_duration_mins;
-        document.getElementById("delay").textContent = data.avg_delay_hrs;
-        document.getElementById("efficiency").textContent = data.efficiency_percent + "%";
-        document.getElementById("eta").textContent = data.estimated_completion_date;
-      });
-  </script>
-</body>
-</html>
+    row('Labs completed',  `${s.labs_completed} / ${s.target_labs}`, s.efficiency_percent);
+    row('GDB usage',       `${s.gdb_usage_percent}%`,        s.gdb_usage_percent);
+    row('Memory tracing',  `${s.memory_trace_percent}%`,     s.memory_trace_percent);
+    row('Diagram coverage',`${s.diagram_coverage_percent}%`, s.diagram_coverage_percent);
+    row('Avg time (min)',  s.average_duration_minutes);
+    row('Avg difficulty',  badge(s.average_difficulty));
+    row('Avg quality',     badge(s.average_execution_quality));
+    row('ETA',             s.projected_completion_date);
+
+    document.getElementById('stamp').textContent = 'Last update ' + s.last_updated;
+  })
+  .catch(() => {
+    document.getElementById('box').textContent = 'Failed to load data';
+  });
+
+function badge(v) {
+  let cls = v >= 4 ? 'good' : (v < 2 ? 'bad' : 'warn');
+  return `<span class="badge ${cls}">${v}</span>`;
+}
+</script>

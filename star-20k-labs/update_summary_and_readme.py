@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 from datetime import datetime
 from pathlib import Path
@@ -14,11 +15,22 @@ try:
 except FileNotFoundError:
     print("❌ summary.json not found.")
     exit(1)
+except json.JSONDecodeError as e:
+    print(f"❌ summary.json format error: {e}")
+    exit(1)
 
-labs_done = sum(1 for lab in data if lab.get("Lab Complete", "").strip().lower() in ["yes", "true", "1"])
-labs_remaining = LABS_TOTAL - labs_done
-gdb_used = sum(1 for lab in data if lab.get("GDB Used", "").strip().lower() in ["yes", "true", "1"])
-anki_count = sum(int(lab.get("Anki Cards", 0)) for lab in data if lab.get("Anki Cards"))
+# === METRICS ===
+labs_done = sum(1 for lab in data if str(lab.get("Lab Complete", "")).strip().lower() in ["yes", "true", "1"])
+labs_remaining = max(0, LABS_TOTAL - labs_done)
+
+gdb_used = sum(1 for lab in data if str(lab.get("GDB Used", "")).strip().lower() in ["yes", "true", "1"])
+
+anki_count = 0
+for lab in data:
+    try:
+        anki_count += int(lab.get("Anki Cards", 0))
+    except ValueError:
+        pass
 
 last_updated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -45,8 +57,10 @@ _→ Coming soon_
 _→ Coming soon_
 """
 
-# === WRITE TO README ===
-with open(README_PATH, "w", encoding="utf-8") as f:
-    f.write(dashboard)
-
-print("✅ README.md updated successfully.")
+# === WRITE TO README.md ===
+try:
+    with open(README_PATH, "w", encoding="utf-8") as f:
+        f.write(dashboard)
+    print("✅ README.md updated successfully.")
+except Exception as e:
+    print(f"❌ Failed to write README.md: {e}")

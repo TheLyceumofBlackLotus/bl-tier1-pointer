@@ -1,34 +1,13 @@
-<script>
-fetch('summary.json')  // ✅ direct access since both HTML and JSON are in /docs/
-  .then(r => r.json())
-  .then(s => {
-    const box = document.getElementById('box');
-    box.textContent = ''; // clear loading...
-
-    const row = (label, val, pct = null) => {
-      const d = document.createElement('div');
-      d.className = 'metric';
-      d.innerHTML = `
-        <div class="label">${label}: <strong>${val}</strong>${pct !== null ? ' (' + pct + '%)' : ''}</div>
-        ${pct !== null ? `<div class="barwrap"><div class="bar" style="width:${pct}%;"></div></div>` : ''}`;
-      box.appendChild(d);
-    };
-
-    row('Labs completed',  `${s.labs_completed} / ${s.target_labs}`, s.efficiency_percent);
-    row('GDB usage',       `${s.gdb_usage_percent}%`,        s.gdb_usage_percent);
-    row('Memory tracing',  `${s.memory_trace_percent}%`,     s.memory_trace_percent);
-    row('Diagram coverage',`${s.diagram_coverage_percent}%`, s.diagram_coverage_percent);
-    row('Avg time (min)',  s.average_duration_minutes);
-    row('Avg difficulty',  badge(s.average_difficulty));
-    row('Avg quality',     badge(s.average_execution_quality));
-    row('ETA',             s.projected_completion_date);
-
-    document.getElementById('stamp').textContent = 'Last update ' + s.last_updated;
-  })
-  .catch(() => {
-    document.getElementById('box').textContent = 'Failed to load data';
-  });
-
-function badge(v) {
-  let cls = v >= 4 ? 'good' : (v < 2 ? 'bad' : 'warn');
-  return `<span
+{
+  "labs_completed": 4,
+  "target_labs": 20000,
+  "efficiency_percent": 0.02,
+  "gdb_usage_percent": 75,
+  "memory_trace_percent": 50,
+  "diagram_coverage_percent": 25,
+  "average_duration_minutes": 28,
+  "average_difficulty": 3.2,
+  "average_execution_quality": 4.1,
+  "projected_completion_date": "2026-08-01",
+  "last_updated": "2025-08-02 22:38 IST"
+}

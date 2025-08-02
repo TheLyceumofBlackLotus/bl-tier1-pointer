@@ -1,63 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>BlackLotus Pointer Dashboard</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  :root{
-    --bg:#f7f8fa;--card:#fff;--txt:#212529;--accent:#0a74ff;
-    --good:#16a34a;--warn:#d97706;--bad:#b91c1c;
-  }
-  body{margin:0;padding:2rem;background:var(--bg);font:15px/1.4 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex;justify-content:center;min-height:100vh}
-  #card{width:100%;max-width:440px;background:var(--card);border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.08);padding:1.6rem}
-  h1{margin:0 0 1.2rem;font-size:1.45rem}
-  .metric{margin:.9rem 0}
-  .label{font-size:.88rem;color:#555;margin-bottom:4px}
-  .barwrap{background:#e5e7eb;border-radius:6px;overflow:hidden;height:12px}
-  .bar{height:100%;background:var(--accent);width:0}
-  .badge{display:inline-block;padding:.12rem .5rem;border-radius:12px;font-size:.75rem;font-weight:600;color:#fff}
-  .good{background:var(--good)} .warn{background:var(--warn)} .bad{background:var(--bad)}
-  footer{margin-top:1.4rem;font-size:.75rem;color:#666;text-align:center}
-</style>
-</head>
-<body>
-<main id="card">
-  <h1>⭐ BlackLotus Lab Dashboard</h1>
-  <div id="box">Loading…</div>
-  <footer id="stamp"></footer>
-</main>
-
 <script>
 fetch('./summary.json')
   .then(r => r.json())
   .then(s => {
-    const box=document.getElementById('box');
-    const mk=(lbl,val,pct=null)=>{
-      const d=document.createElement('div');d.className='metric';
-      d.innerHTML=`<div class="label">${lbl}: <strong>${val}</strong>${pct!==null?' ('+pct+'%)':''}</div>`+
-        (pct!==null?`<div class="barwrap"><div class="bar" style="width:${pct}%;"></div></div>`:'');
+    const box = document.getElementById('box');
+    box.textContent = '';                       // ← clears “Loading…”
+
+    // helper
+    const row = (label, val, pct = null) => {
+      const d = document.createElement('div');
+      d.className = 'metric';
+      d.innerHTML = `
+        <div class="label">${label}: <strong>${val}</strong>${pct !== null ? ' (' + pct + '%)' : ''}</div>
+        ${pct !== null ? `<div class="barwrap"><div class="bar" style="width:${pct}%;"></div></div>` : ''}
+      `;
       box.appendChild(d);
     };
 
-    mk('Labs completed',`${s.labs_completed} / ${s.target_labs}`,s.efficiency_percent);
-    mk('GDB usage',`${s.gdb_usage_percent}%`,s.gdb_usage_percent);
-    mk('Memory tracing',`${s.memory_trace_percent}%`,s.memory_trace_percent);
-    mk('Diagram coverage',`${s.diagram_coverage_percent}%`,s.diagram_coverage_percent);
-    mk('Avg time (min)',s.average_duration_minutes);
-    mk('Avg difficulty',badge(s.average_difficulty));
-    mk('Avg quality',badge(s.average_execution_quality));
-    mk('ETA',s.projected_completion_date);
+    row('Labs completed',  `${s.labs_completed} / ${s.target_labs}`, s.efficiency_percent);
+    row('GDB usage',       `${s.gdb_usage_percent}%`,        s.gdb_usage_percent);
+    row('Memory tracing',  `${s.memory_trace_percent}%`,     s.memory_trace_percent);
+    row('Diagram coverage',`${s.diagram_coverage_percent}%`, s.diagram_coverage_percent);
+    row('Avg time (min)',  s.average_duration_minutes);
+    row('Avg difficulty',  badge(s.average_difficulty));
+    row('Avg quality',     badge(s.average_execution_quality));
+    row('ETA',             s.projected_completion_date);
 
-    document.getElementById('stamp').textContent='Last update '+s.last_updated;
+    document.getElementById('stamp')
+            .textContent = 'Last update ' + s.last_updated;
   })
-  .catch(()=>{document.getElementById('box').textContent='Failed to load data';});
+  .catch(() => {
+    document.getElementById('box').textContent = 'Failed to load data';
+  });
 
 function badge(v){
-  let cls='warn';
-  if(v>=4)cls='good'; else if(v<2)cls='bad';
+  let cls = v >= 4 ? 'good' : (v < 2 ? 'bad' : 'warn');
   return `<span class="badge ${cls}">${v}</span>`;
 }
 </script>
-</body>
-</html>

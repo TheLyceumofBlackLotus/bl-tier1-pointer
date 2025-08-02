@@ -1,15 +1,9 @@
 {
-    "total_labs": 3,
-    "labs_completed": 3,
-    "labs_pending": 0,
-    "efficiency_percent": 100.0,
-    "average_duration_minutes": 0.09,
-    "average_execution_quality": 4.0,
-    "average_difficulty": 3.0,
-    "anki_cards_total": 0,
-    "gdb_usage_percent": 0.0,
-    "memory_trace_percent": 0.0,
-    "diagram_coverage_percent": 0.0,
-    "eta_days": 0,
-    "estimated_completion_date": "N/A"
+    "total_labs_done": 010,
+    "total_required": 1000,
+    "labs_remaining": 999,
+    "efficiency_percent": 10,
+    "average_time_per_lab_mins": 47,
+    "projected_completion_date": "2026-01-12",
+    "last_updated": "2025-08-02 22:17 IST"
 }

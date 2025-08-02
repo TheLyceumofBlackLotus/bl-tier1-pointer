@@ -1,16 +1,39 @@
-{
-    "target_labs": 20000,
-    "labs_completed": 3,
-    "labs_pending": 19997,
-    "efficiency_percent": 0.01,
-    "average_duration_minutes": 0.09,
-    "average_execution_quality": 4.0,
-    "average_difficulty": 3.0,
-    "anki_cards_total": 0,
-    "gdb_usage_percent": 0.0,
-    "memory_trace_percent": 0.0,
-    "diagram_coverage_percent": 0.0,
-    "eta_days": "N/A",
-    "projected_completion_date": "N/A",
-    "last_updated": "2025-08-02 18:15 IST"
+<script>
+fetch('./summary.json')
+  .then(r => r.json())
+  .then(s => {
+    const box = document.getElementById('box');
+    box.textContent = '';                       // ← clears “Loading…”
+
+    // helper
+    const row = (label, val, pct = null) => {
+      const d = document.createElement('div');
+      d.className = 'metric';
+      d.innerHTML = `
+        <div class="label">${label}: <strong>${val}</strong>${pct !== null ? ' (' + pct + '%)' : ''}</div>
+        ${pct !== null ? `<div class="barwrap"><div class="bar" style="width:${pct}%;"></div></div>` : ''}
+      `;
+      box.appendChild(d);
+    };
+
+    row('Labs completed',  `${s.labs_completed} / ${s.target_labs}`, s.efficiency_percent);
+    row('GDB usage',       `${s.gdb_usage_percent}%`,        s.gdb_usage_percent);
+    row('Memory tracing',  `${s.memory_trace_percent}%`,     s.memory_trace_percent);
+    row('Diagram coverage',`${s.diagram_coverage_percent}%`, s.diagram_coverage_percent);
+    row('Avg time (min)',  s.average_duration_minutes);
+    row('Avg difficulty',  badge(s.average_difficulty));
+    row('Avg quality',     badge(s.average_execution_quality));
+    row('ETA',             s.projected_completion_date);
+
+    document.getElementById('stamp')
+            .textContent = 'Last update ' + s.last_updated;
+  })
+  .catch(() => {
+    document.getElementById('box').textContent = 'Failed to load data';
+  });
+
+function badge(v){
+  let cls = v >= 4 ? 'good' : (v < 2 ? 'bad' : 'warn');
+  return `<span class="badge ${cls}">${v}</span>`;
 }
+</script>

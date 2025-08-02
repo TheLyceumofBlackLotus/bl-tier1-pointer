@@ -20,14 +20,10 @@ except json.JSONDecodeError as e:
     exit(1)
 
 # === METRICS ===
-labs_done = sum(
-    1 for lab in data if str(lab.get("Lab Complete", "")).strip().lower() in ["yes", "true", "1"]
-)
+labs_done = sum(1 for lab in data if lab.get("Lab Complete", "").strip().lower() in ["yes", "true", "1"])
 labs_remaining = max(0, LABS_TOTAL - labs_done)
 
-gdb_used = sum(
-    1 for lab in data if str(lab.get("GDB Used", "")).strip().lower() in ["yes", "true", "1"]
-)
+gdb_used = sum(1 for lab in data if lab.get("GDB Used", "").strip().lower() in ["yes", "true", "1"])
 
 anki_count = 0
 for lab in data:
@@ -38,30 +34,30 @@ for lab in data:
 
 last_updated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-# === DASHBOARD MARKDOWN ===
+# === DASHBOARD CONTENT ===
 dashboard = f"""\
-# ⚔️ Black Lotus Mutation Dashboard v3
+# 🧠 Black Lotus Tier 1 — Execution Status
 
-**Labs Completed**: `{labs_done}`  
-**Labs Remaining**: `{labs_remaining}`  
-**GDB Used**: `{gdb_used}`  
-**Anki Cards**: `{anki_count}`  
+**Labs Completed:** `{labs_done}`  
+**Labs Remaining:** `{labs_remaining}`  
+**GDB Used:** `{gdb_used}`  
+**Anki Cards:** `{anki_count}`  
 
 🕒 **Last Updated:** `{last_updated}` IST
 
 ---
 
 ### 🔣 Symbol Frequency  
-_→ Coming soon_
+_Coming soon_
 
 ### 🧬 Mutation ID Count  
-_→ Coming soon_
+_Coming soon_
 
 ### 📚 Topic Breakdown  
-_→ Coming soon_
+_Coming soon_
 """
 
-# === WRITE TO README.md ===
+# === WRITE TO README.md (Windows-safe) ===
 try:
     with open(README_PATH, "w", encoding="utf-8", errors="ignore") as f:
         f.write(dashboard)

@@ -1,0 +1,18 @@
+name: 🚀 CI Badge Refresh
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Badge CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Echo Status
+        run: echo "CI Badge workflow executed successfully!"

@@ -33,20 +33,24 @@
   <div class="metric">🕒 Last Updated: <span id="lastUpdated">Loading...</span></div>
 
   <script>
-    fetch("https://thelyceumofblacklotus.github.io/bl-tier1-pointer/summary.json")
-      .then(response => response.json())
+    fetch("./summary.json", { cache: "no-cache" })
+      .then(response => {
+        if (!response.ok) throw new Error("Fetch failed");
+        return response.json();
+      })
       .then(data => {
-        document.getElementById("totalLabs").textContent = data.total_labs;
-        document.getElementById("completed").textContent = data.completed;
-        document.getElementById("efficiency").textContent = data.efficiency;
-        document.getElementById("avgDuration").textContent = data.average_duration_mins;
-        document.getElementById("ankiCards").textContent = data.anki_cards_total;
-        document.getElementById("mutations").textContent = data.mutations_tracked;
-        document.getElementById("eta").textContent = data.eta_hours_to_finish;
-        document.getElementById("lastUpdated").textContent = data.last_updated;
+        document.getElementById("totalLabs").textContent = data.total_labs || "0";
+        document.getElementById("completed").textContent = data.completed || "0";
+        document.getElementById("efficiency").textContent = data.efficiency || "0";
+        document.getElementById("avgDuration").textContent = data.average_duration_mins || "0";
+        document.getElementById("ankiCards").textContent = data.anki_cards_total || "0";
+        document.getElementById("mutations").textContent = data.mutations_tracked || "0";
+        document.getElementById("eta").textContent = data.eta_hours_to_finish || "0";
+        document.getElementById("lastUpdated").textContent = data.last_updated || "N/A";
       })
       .catch(err => {
         document.body.innerHTML += "<p style='color: red;'>❌ Failed to load summary.json</p>";
+        console.error("Dashboard fetch error:", err);
       });
   </script>
 </body>

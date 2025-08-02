@@ -20,10 +20,14 @@ except json.JSONDecodeError as e:
     exit(1)
 
 # === METRICS ===
-labs_done = sum(1 for lab in data if str(lab.get("Lab Complete", "")).strip().lower() in ["yes", "true", "1"])
+labs_done = sum(
+    1 for lab in data if str(lab.get("Lab Complete", "")).strip().lower() in ["yes", "true", "1"]
+)
 labs_remaining = max(0, LABS_TOTAL - labs_done)
 
-gdb_used = sum(1 for lab in data if str(lab.get("GDB Used", "")).strip().lower() in ["yes", "true", "1"])
+gdb_used = sum(
+    1 for lab in data if str(lab.get("GDB Used", "")).strip().lower() in ["yes", "true", "1"]
+)
 
 anki_count = 0
 for lab in data:
@@ -59,7 +63,7 @@ _→ Coming soon_
 
 # === WRITE TO README.md ===
 try:
-    with open(README_PATH, "w", encoding="utf-8") as f:
+    with open(README_PATH, "w", encoding="utf-8", errors="ignore") as f:
         f.write(dashboard)
     print("✅ README.md updated successfully.")
 except Exception as e:

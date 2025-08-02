@@ -1,0 +1,38 @@
+name: 🧠 Auto-Update Dashboard
+
+on:
+  push:
+    paths:
+      - 'summary.json'
+      - '.github/workflows/update-dashboard.yml'
+  workflow_dispatch:
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: 📥 Install dependencies
+        run: pip install -r requirements.txt || true
+
+      - name: 🧾 Run README dashboard update script
+        run: python scripts/update_readme.py
+
+      - name: 📊 Run HTML dashboard update script
+        run: python scripts/update_html.py
+
+      - name: 🚀 Commit and push changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add README.md docs/dashboard.html summary.json
+          git commit -m "🧠 Auto-update README + dashboard from summary.json" || echo "No changes to commit"
+          git push

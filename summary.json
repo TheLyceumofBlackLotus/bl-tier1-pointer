@@ -1,9 +1,9 @@
 {
-    "total_labs_done": 98,
+    "total_labs_done": 01,
     "total_required": 1000,
-    "labs_remaining": 902,
-    "efficiency_percent": 91.4,
-    "average_time_per_lab_mins": 47.8,
+    "labs_remaining": 999,
+    "efficiency_percent": 00,
+    "average_time_per_lab_mins": 47,
     "projected_completion_date": "2026-01-12",
     "last_updated": "2025-08-02 22:17 IST"
 }

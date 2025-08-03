@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🌌 BlackLotus Tier1 Pointer Dashboard</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00FF41;
+      font-family: monospace;
+      padding: 2rem;
+    }
+    h1 {
+      color: #FF4136;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .metric {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 BlackLotus Star Symbol Dashboard</h1>
+  <div class="metric">🧪 Total Labs: <span id="totalLabs">Loading...</span></div>
+  <div class="metric">✅ Completed: <span id="completed">Loading...</span></div>
+  <div class="metric">⚙️ Efficiency: <span id="efficiency">Loading...</span>%</div>
+  <div class="metric">⏱️ Avg Duration: <span id="avgDuration">Loading...</span> mins</div>
+  <div class="metric">🧠 Anki Cards: <span id="ankiCards">Loading...</span></div>
+  <div class="metric">🧬 Mutations: <span id="mutations">Loading...</span></div>
+  <div class="metric">⏳ ETA to Finish: <span id="eta">Loading...</span> hrs</div>
+  <div class="metric">🕒 Last Updated: <span id="lastUpdated">Loading...</span></div>
+
+  <script>
+    fetch("./summary.json", { cache: "no-cache" })
+      .then(response => {
+        if (!response.ok) throw new Error("Fetch failed");
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById("totalLabs").textContent = data.total_labs || "0";
+        document.getElementById("completed").textContent = data.completed || "0";
+        document.getElementById("efficiency").textContent = data.efficiency || "0";
+        document.getElementById("avgDuration").textContent = data.average_duration_mins || "0";
+        document.getElementById("ankiCards").textContent = data.anki_cards_total || "0";
+        document.getElementById("mutations").textContent = data.mutations_tracked || "0";
+        document.getElementById("eta").textContent = data.eta_hours_to_finish || "0";
+        document.getElementById("lastUpdated").textContent = data.last_updated || "N/A";
+      })
+      .catch(err => {
+        document.body.innerHTML += "<p style='color: red;'>❌ Failed to load summary.json</p>";
+        console.error("Dashboard fetch error:", err);
+      });
+  </script>
+</body>
+</html>

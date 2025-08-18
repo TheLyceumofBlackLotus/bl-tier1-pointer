@@ -1,0 +1,11 @@
+{
+  "goal": 250000,
+  "tiers": [
+    { "tier": 1, "alias": "The Pointer Forge",     "target": 1000, "uploaded": 0, "mutated": 0 },
+    { "tier": 2, "alias": "The Struct Zone",       "target": 1000, "uploaded": 0, "mutated": 0 },
+    { "tier": 3, "alias": "The Stack Crucible",    "target": 1000, "uploaded": 0, "mutated": 0 },
+    { "tier": 4, "alias": "The Exploit Core",      "target": 1000, "uploaded": 0, "mutated": 0 },
+    { "tier": 5, "alias": "The Cognitive Furnace", "target": 1000, "uploaded": 0, "mutated": 0 }
+  ],
+  "updated_at": "2025-08-17T03:00:00Z"
+}

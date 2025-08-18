@@ -1,0 +1,17 @@
+name: Guard README
+on:
+  push:
+    paths: ["README.md"]
+  pull_request:
+    paths: ["README.md"]
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - run: |
+          AUTHOR="$(git log -1 --pretty=format:'%an')"
+          if [ "$AUTHOR" != "github-actions[bot]" ]; then
+            echo "README.md is generated from summary.json. Edit that instead."; exit 1
+          fi
